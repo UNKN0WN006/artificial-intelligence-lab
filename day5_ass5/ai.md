@@ -133,3 +133,112 @@ Summary:
 Log each step’s details to a file as your algorithm runs.
 This file will contain both intermediate and final outputs.
 Restore Checkpoint
+
+
+Great questions! Here’s how you can handle intermediate outputs and plotting graphs for time and memory as required by your assignment:
+
+1. Intermediate Outputs
+You are already logging intermediate outputs in your search functions. For example, in BFS:
+
+
+write_log(logfile, f"BFS Step {step}: {state_to_str(state)}")
+What to do:
+
+Make sure every search function logs each step (state expansion, frontier, etc.) to the same output file.
+You can add more details if needed, such as the current frontier, path so far, or memory usage at each step.
+Example (add to your search functions if you want more detail):
+
+
+write_log(logfile, f"Frontier: {[state_to_str(s[0]) for s in queue]}")
+2. Collecting Time and Memory Data
+You are already collecting time for each run:
+
+
+t0 = time.time()# ...run algorithm...t1 = time.time()write_log(logfile, f"Time taken: {t1-t0:.4f} seconds")
+To collect memory usage:
+Add this at the start and end of each run (Linux only):
+
+
+import resourcedef get_memory_usage_kb():    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss# Before runmem_before = get_memory_usage_kb()# ...run algorithm...mem_after = get_memory_usage_kb()write_log(logfile, f"Memory used: {mem_after - mem_before} KB")
+3. Storing Results for Plotting
+Create a list or dictionary to store the results for each algorithm and parameter set:
+
+
+results = []# After each run:results.append({    "algorithm": "BFS",    "param": None,    "time": t1-t0,    "memory": mem_after - mem_before})
+4. Plotting the Graphs
+After all runs, use matplotlib to plot the results:
+
+
+import matplotlib.pyplot as plt# Example: Plot time for each algorithmalgos = [r["algorithm"] for r in results]times = [r["time"] for r in results]memory = [r["memory"] for r in results]plt.figure(figsize=(10,5))plt.bar(algos, times)plt.ylabel("Time (seconds)")plt.title("Algorithm Time Comparison")plt.show()plt.figure(figsize=(10,5))plt.bar(algos, memory)plt.ylabel("Memory (KB)")plt.title("Algorithm Memory Comparison")plt.show()
+For DLS/IDS with different depths, you can plot depth vs time/memory.
+
+5. Summary Table
+You can also print or save a table of results:
+
+
+import pandas as pddf = pd.DataFrame(results)print(df)df.to_csv("results_summary.csv", index=False)
+In Short
+Intermediate outputs: Already handled by your logging; add more detail if you want.
+Time/memory: Use time.time() and resource.getrusage to collect for each run.
+Results: Store in a list/dict for plotting.
+Plotting: Use matplotlib for bar/line plots as required.
+Table: Use pandas for a summary table.
+Let me know if you want a code cell example for any of these steps!
+
+
+import pandas as pd
+df = pd.DataFrame(results)
+print(df)
+df.to_csv("results_summary.csv", index=False)
+
+
+import matplotlib.pyplot as plt
+
+# Example: Plot time for each algorithm
+algos = [r["algorithm"] for r in results]
+times = [r["time"] for r in results]
+memory = [r["memory"] for r in results]
+
+plt.figure(figsize=(10,5))
+plt.bar(algos, times)
+plt.ylabel("Time (seconds)")
+plt.title("Algorithm Time Comparison")
+plt.show()
+
+plt.figure(figsize=(10,5))
+plt.bar(algos, memory)
+plt.ylabel("Memory (KB)")
+plt.title("Algorithm Memory Comparison")
+plt.show()
+
+results = []
+
+# After each run:
+results.append({
+    "algorithm": "BFS",
+    "param": None,
+    "time": t1-t0,
+    "memory": mem_after - mem_before
+})
+
+import resource
+
+def get_memory_usage_kb():
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+# Before run
+mem_before = get_memory_usage_kb()
+# ...run algorithm...
+mem_after = get_memory_usage_kb()
+write_log(logfile, f"Memory used: {mem_after - mem_before} KB")
+
+t0 = time.time()
+# ...run algorithm...
+t1 = time.time()
+write_log(logfile, f"Time taken: {t1-t0:.4f} seconds")
+
+
+write_log(logfile, f"Frontier: {[state_to_str(s[0]) for s in queue]}")
+
+write_log(logfile, f"BFS Step {step}: {state_to_str(state)}")
+
