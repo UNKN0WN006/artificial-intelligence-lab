@@ -1,6 +1,6 @@
 {
   "start": ["L", "L", "L", "L", "L"],
   "goal": ["R", "R", "R", "R", "R"],
-  "logfile": "output_ils.txt",
+  "logfile": "041_Sushar_Hembram_Assignment5_output_ils.txt",
   "max_restarts": 5
 }

@@ -1,0 +1,16 @@
+IDS: Trying depth 1
+Step 0: F:L, W:L, G:L, C:L, B:L (depth 0)
+Step 1: F:R, W:L, G:R, C:L, B:R (depth 1)
+IDS: Trying depth 2
+Step 0: F:L, W:L, G:L, C:L, B:L (depth 0)
+Step 1: F:R, W:L, G:R, C:L, B:R (depth 1)
+Step 2: F:L, W:L, G:R, C:L, B:L (depth 2)
+IDS: Trying depth 3
+Step 0: F:L, W:L, G:L, C:L, B:L (depth 0)
+Step 1: F:R, W:L, G:R, C:L, B:R (depth 1)
+Step 2: F:L, W:L, G:R, C:L, B:L (depth 2)
+Step 3: F:R, W:L, G:R, C:R, B:R (depth 3)
+Step 3: F:R, W:R, G:R, C:L, B:R (depth 3)
+No solution found.
+Time: 0.0005s
+Memory used: 0 KB

@@ -1,0 +1,61 @@
+ILS: Restart 0
+ILS Step: F:L, W:L, G:L, C:L, B:L (d 0)
+ILS Step: F:R, W:L, G:R, C:L, B:R (d 1)
+ILS Step: F:L, W:L, G:R, C:L, B:L (d 2)
+ILS Step: F:R, W:R, G:R, C:L, B:R (d 3)
+ILS Step: F:L, W:R, G:L, C:L, B:L (d 4)
+ILS Step: F:R, W:R, G:L, C:R, B:R (d 5)
+ILS Step: F:L, W:L, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:L, G:R, C:R, B:R (d 7)
+ILS Step: F:L, W:R, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:R, B:R (d 7)
+ILS: Restart 1
+ILS Step: F:L, W:L, G:L, C:L, B:L (d 0)
+ILS Step: F:R, W:L, G:R, C:L, B:R (d 1)
+ILS Step: F:L, W:L, G:R, C:L, B:L (d 2)
+ILS Step: F:R, W:L, G:R, C:R, B:R (d 3)
+ILS Step: F:L, W:L, G:L, C:R, B:L (d 4)
+ILS Step: F:R, W:R, G:L, C:R, B:R (d 5)
+ILS Step: F:L, W:R, G:L, C:L, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:L, B:R (d 7)
+ILS Step: F:L, W:R, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:R, B:R (d 7)
+ILS: Restart 2
+ILS Step: F:L, W:L, G:L, C:L, B:L (d 0)
+ILS Step: F:R, W:L, G:R, C:L, B:R (d 1)
+ILS Step: F:L, W:L, G:R, C:L, B:L (d 2)
+ILS Step: F:R, W:L, G:R, C:R, B:R (d 3)
+ILS Step: F:L, W:L, G:L, C:R, B:L (d 4)
+ILS Step: F:R, W:R, G:L, C:R, B:R (d 5)
+ILS Step: F:L, W:R, G:L, C:L, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:L, B:R (d 7)
+ILS Step: F:L, W:R, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:R, B:R (d 7)
+ILS: Restart 3
+ILS Step: F:L, W:L, G:L, C:L, B:L (d 0)
+ILS Step: F:R, W:L, G:R, C:L, B:R (d 1)
+ILS Step: F:L, W:L, G:R, C:L, B:L (d 2)
+ILS Step: F:R, W:L, G:R, C:R, B:R (d 3)
+ILS Step: F:L, W:L, G:L, C:R, B:L (d 4)
+ILS Step: F:R, W:R, G:L, C:R, B:R (d 5)
+ILS Step: F:L, W:R, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:R, B:R (d 7)
+ILS: Restart 4
+ILS Step: F:L, W:L, G:L, C:L, B:L (d 0)
+ILS Step: F:R, W:L, G:R, C:L, B:R (d 1)
+ILS Step: F:L, W:L, G:R, C:L, B:L (d 2)
+ILS Step: F:R, W:R, G:R, C:L, B:R (d 3)
+ILS Step: F:L, W:R, G:L, C:L, B:L (d 4)
+ILS Step: F:R, W:R, G:L, C:R, B:R (d 5)
+ILS Step: F:L, W:R, G:L, C:R, B:L (d 6)
+ILS Step: F:R, W:R, G:R, C:R, B:R (d 7)
+Solution in 7 steps:
+Step 1: F+G -> F:R, W:L, G:R, C:L, B:R
+Step 2: F alone -> F:L, W:L, G:R, C:L, B:L
+Step 3: F+W -> F:R, W:R, G:R, C:L, B:R
+Step 4: F+G -> F:L, W:R, G:L, C:L, B:L
+Step 5: F+C -> F:R, W:R, G:L, C:R, B:R
+Step 6: F alone -> F:L, W:R, G:L, C:R, B:L
+Step 7: F+G -> F:R, W:R, G:R, C:R, B:R
+Time: 0.0018s
+Memory used: 0 KB

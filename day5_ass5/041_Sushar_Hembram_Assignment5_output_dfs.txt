@@ -1,0 +1,30 @@
+Step 0: F:L, W:L, G:L, C:L, B:L
+Stack: []
+Step 1: F:R, W:L, G:R, C:L, B:R
+Stack: []
+Step 2: F:L, W:L, G:R, C:L, B:L
+Stack: []
+Step 3: F:R, W:L, G:R, C:R, B:R
+Stack: ['F:R, W:R, G:R, C:L, B:R']
+Step 4: F:L, W:L, G:L, C:R, B:L
+Stack: ['F:R, W:R, G:R, C:L, B:R']
+Step 5: F:R, W:R, G:L, C:R, B:R
+Stack: ['F:R, W:R, G:R, C:L, B:R']
+Step 6: F:L, W:R, G:L, C:L, B:L
+Stack: ['F:R, W:R, G:R, C:L, B:R', 'F:L, W:R, G:L, C:R, B:L']
+Step 7: F:R, W:R, G:R, C:L, B:R
+Stack: ['F:R, W:R, G:R, C:L, B:R', 'F:L, W:R, G:L, C:R, B:L']
+Step 8: F:L, W:R, G:L, C:R, B:L
+Stack: ['F:R, W:R, G:R, C:L, B:R']
+Step 9: F:R, W:R, G:R, C:R, B:R
+Stack: ['F:R, W:R, G:R, C:L, B:R']
+Solution in 7 steps:
+Step 1: F+G -> F:R, W:L, G:R, C:L, B:R
+Step 2: F alone -> F:L, W:L, G:R, C:L, B:L
+Step 3: F+C -> F:R, W:L, G:R, C:R, B:R
+Step 4: F+G -> F:L, W:L, G:L, C:R, B:L
+Step 5: F+W -> F:R, W:R, G:L, C:R, B:R
+Step 6: F alone -> F:L, W:R, G:L, C:R, B:L
+Step 7: F+G -> F:R, W:R, G:R, C:R, B:R
+Time: 0.0007s
+Memory used: 0 KB

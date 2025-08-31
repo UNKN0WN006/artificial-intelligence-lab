@@ -1,0 +1,6 @@
+Step 0: F:L, W:L, G:L, C:L, B:L (depth 0)
+Step 1: F:R, W:L, G:R, C:L, B:R (depth 1)
+Step 2: F:L, W:L, G:R, C:L, B:L (depth 2)
+No solution found.
+Time: 0.0002s
+Memory used: 0 KB
