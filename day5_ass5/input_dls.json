@@ -1,0 +1,6 @@
+{
+  "start": ["L", "L", "L", "L", "L"],
+  "goal": ["R", "R", "R", "R", "R"],
+  "logfile": "output_dls.txt",
+  "depth_limit": 3
+}

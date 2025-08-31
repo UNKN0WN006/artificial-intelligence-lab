@@ -1,0 +1,5 @@
+{
+  "start": ["L", "L", "L", "L", "L"],
+  "goal": ["R", "R", "R", "R", "R"],
+  "logfile": "output_dfs.txt"
+}
