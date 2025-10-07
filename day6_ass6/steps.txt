@@ -1,0 +1,40 @@
+Step 1  h=-3  next=O d=0
+X..
+...
+...
+----------
+Step 2  h=1  next=X d=1
+X..
+.O.
+...
+----------
+Step 3  h=0  next=X d=1
+X.O
+...
+...
+----------
+Step 4  h=0  next=X d=1
+X..
+...
+O..
+----------
+Step 5  h=0  next=X d=1
+X..
+...
+..O
+----------
+Step 6  h=0  next=O d=2
+XX.
+.O.
+...
+----------
+Step 7  h=2  next=X d=3
+XXO
+.O.
+...
+----------
+Step 8  h=2  next=X d=3
+XX.
+.O.
+O..
+----------

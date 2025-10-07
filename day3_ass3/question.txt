@@ -1,0 +1,21 @@
+Look at the classical tower of hanoi problem and its solution in the below link:
+https://www.freecodecamp.org/news/analyzing-the-algorithm-to-solve-the-tower-of-hanoi-problem-686685f032e3/
+
+
+Write a Python program to solve the problem using breadth-first search.
+Inputs to the program should be
+1. Number of disc
+2. Initial rod where disc are present
+3. Initial arrangement, i.e., decreasing or increasing order
+4. Final rod where disc will be shifted
+5. Final arrangement, i.e., decreasing or increasing order
+
+
+Intermediate output shall be properly displayed. For example, you can find a sample in this link:
+https://www.includehelp.com/ml-ai/water-jug-problem-in-artificial-intelligence.aspx
+This intermediate output shall be written in an output file.
+
+Things to upload:
+1. Downloaded colab .ipynb files
+2. Output files
+3. Small write-up on the process used to solve the problem.

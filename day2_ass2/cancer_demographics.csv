@@ -1,0 +1,11 @@
+PatientID,Gender,AgeGroup,FamilyHistory,CancerType,Stage
+P001,Male,30-39,Yes,Breast,Stage I
+P002,Female,50-59,No,Lung,Stage II
+P003,Female,40-49,Yes,Colon,Stage III
+P004,Male,60-69,No,Prostate,Stage II
+P005,Female,30-39,Yes,Breast,Stage I
+P006,Male,70-79,No,Skin,Stage I
+P007,Female,50-59,Yes,Lung,Stage III
+P008,Female,60-69,No,Colon,Stage II
+P009,Male,40-49,Yes,Prostate,Stage I
+P010,Male,70-79,No,Skin,Stage II

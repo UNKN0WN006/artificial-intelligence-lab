@@ -1,0 +1,26 @@
+Win found for X at step 8. Sequence:
+depth=0 next=O
+X..
+...
+...
+------
+depth=1 next=X
+X..
+.O.
+...
+------
+depth=2 next=O
+XX.
+.O.
+...
+------
+depth=3 next=X
+XX.
+.O.
+O..
+------
+depth=4 next=O
+XXX
+.O.
+O..
+------

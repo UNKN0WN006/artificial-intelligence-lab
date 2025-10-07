@@ -1,0 +1,11 @@
+Gender=Male,AgeGroup=30-39,FamilyHistory=Yes,CancerType=Breast,Stage=Stage I,Gender=Female,AgeGroup=50-59,FamilyHistory=No,CancerType=Lung,Stage=Stage II,AgeGroup=40-49,CancerType=Colon,Stage=Stage III,AgeGroup=60-69,CancerType=Prostate,AgeGroup=70-79,CancerType=Skin
+1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0
+0,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0
+1,0,0,0,0,0,0,1,0,1,0,0,0,1,1,0,0
+0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0
+1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1
+0,0,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
+0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0
+1,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0
+1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1

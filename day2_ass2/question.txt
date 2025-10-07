@@ -1,0 +1,28 @@
+a. Write a Python program to load
+and read one categorical data from a CSV file.
+
+b. Convert it into a transactional format using
+their attribute-value pair. Give a numerical value for each attribute value
+pair. After that make a binary dataset from the categorical format where the
+numbers given to each attribute value pair represent a column name.
+
+c. Draw the corresponding graph considering the
+binary dataset as the value present in it.
+
+d. Run the single pair shortest path problem and draw the path on the
+graph.
+
+
+
+
+
+Things to upload:
+
+1. Downloaded colab .ipynb files
+
+2. Input files
+
+3. Output files
+
+4. Small write-up on the process used to solve
+the problem.

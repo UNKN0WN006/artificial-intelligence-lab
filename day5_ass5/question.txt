@@ -1,0 +1,31 @@
+Look at the modified version of classical Missionaries and Carnivals Problem.
+
+●       A farmer with his wolf, goat, and cabbage come to the edge of a river they wish to cross.
+●       There is a boat at the river's edge, but, of course, only the farmer can row.
+●       Also, the boat can carry only the two things at a time including the rower.
+●       If the wolf is ever left with the goat, the wolf will eat the goat.
+●       Similarly, if the goat is left alone with cabbage, the goat will eat the cabbage.
+●       Devise a sequence of crossing of the river so that all four characters arrive safely on the other side of the river.
+
+Before today's lab, you have either solved the same problem or some other related searching problems using different graph or tree search algorithms.
+Today, you have to use them all (BFS, DFS, DLS, IDS, ILS, and UCS) to solve this problem.
+
+Points to note:
+
+1. For different, DLS and IDS, consider 3 different depths and run with the same configuration.
+2. For, ILS and UCS, consider the cost of your choice.
+3. Provide necessary inputs to the program. Do not statically mention any of the required parameters to run the setup inside the program.
+
+4. Collect the memory and time requirement for each run of the above algorithms along with different parameters for the same algorithms (e.g., depth).
+
+5. Input, output states and any other parameter required to run the algorithms must be written in a file (a separate file for each of the algorithms to be prepared as separate inputs may be required for running each algorithm). Write the proper documentation of the input file.
+6. Intermediate output shall be properly displayed and will be written in a separate output/log file.
+7. Compare the time and memory requirements of the algorithms/same algorithms with separate input parameters in a table.
+8. Draw any 2 plots to compare the time and memory requirement (2 for each) of the algorithm. Total of 4 plots. (2 different plots for memory requirement and 2 different plots for time requirement)
+
+Things to upload:
+
+1. Downloaded colab .ipynb files
+2. All required Input files
+3. All generated Output files
+4. The complete write-up either in the colab file or in a separate doc file on the process used to solve the problem.

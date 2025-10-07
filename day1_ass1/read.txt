@@ -1,0 +1,1 @@
+﻿Hi testing the google colab by running python reading and then writing it another file.
