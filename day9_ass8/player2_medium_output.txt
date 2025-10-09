@@ -1,0 +1,47 @@
+You are O, computer is X
+. . .
+. . .
+. . .
+
+Computer move:
+. . .
+. . .
+. . X
+
+O . .
+. . .
+. . X
+
+Computer move:
+O . .
+. . X
+. . X
+
+O . O
+. . X
+. . X
+
+Computer move:
+O X O
+. . X
+. . X
+
+O X O
+. O X
+. . X
+
+Computer move:
+O X O
+. O X
+X . X
+
+O X O
+. O X
+X O X
+
+Computer move:
+O X O
+X O X
+X O X
+
+Draw!

@@ -1,0 +1,40 @@
+﻿Assignment 8
+002311001041
+Writeup
+
+
+Summary:
+For this assignment, I developed a console-based Tic-Tac-Toe game where a human can play against the computer. The AI uses the alpha-beta pruning technique to optimize its moves, making the game more challenging and efficient.
+
+
+
+
+Key Features Added:
+* Implemented alpha-beta pruning for the computer’s decision-making.
+* Added difficulty levels: easy (random moves), medium (blocks player wins), and hard (uses alpha-beta pruning).
+* Allowed the user to choose whether to play first or second.
+
+
+Main Functions Used:
+* print_b(): Displays the current state of the board.
+* win(): Checks if a player has won.
+* full(): Checks if the board is full.
+* score(): Evaluates the board for the AI.
+* ab(): Performs alpha-beta pruning to select the best move.
+* easy_move(), medium_move(), hard_move(): Select moves based on the chosen difficulty.
+* main(): Handles the game loop, user input, and overall flow.
+
+
+Important Variables:
+* b: Represents the game board as a 2D list.
+* user, ai: Symbols for the human and computer players.
+* diff: Stores the selected difficulty level.
+* turn: Tracks whose turn it is.
+
+
+Additional Details:
+The game logs each move and the final result to a text file for record-keeping.
+The code is structured for clarity and simplicity, with short variable and function names.
+
+
+Conclusion: This implementation demonstrates the use of search algorithms in game AI and provides a user-friendly interface with adjustable difficulty.
