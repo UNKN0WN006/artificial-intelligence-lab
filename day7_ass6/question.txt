@@ -1,0 +1,33 @@
+Look at the
+classical Tic-Tac-Toe problem and its solution.
+
+
+
+Write a Python program to solve the problem
+using Best First Search in such a way that it can handle the 4 x 4 problem with
+the same program.
+
+Choose any suitable heuristic function and
+execute it in the problem.
+
+Provide necessary inputs to the program. Do not
+statically mention any of them inside the program.
+
+Input and output states shall be written in the
+same file and you can read them properly as required.
+
+Intermediate output shall be properly displayed
+and will be written in a separate output file.
+
+
+
+Things to upload:
+
+1. Downloaded colab .ipynb files
+
+2. Input file
+
+3. Output files
+
+4. Small write-up on the process used to solve
+the problem.
