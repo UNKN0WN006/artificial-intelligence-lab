@@ -280,9 +280,14 @@ treatment_for(D, Severity, Treat) :-
 % diagnose_from checks given symptom and risk lists (non-interactive)
 diagnose_from(SGiven, RGiven, D, severe) :-
     disease(D, _),
-    ( has_any_severe(D, SGiven)
-    ; has_any_risk(D, RGiven)
-    ), !.
+    % immediate severe if any severe indicator reported
+    has_any_severe(D, SGiven), !.
+% risk factors alone should not mark "severe" — require at least one matching symptom
+diagnose_from(SGiven, RGiven, D, severe) :-
+    disease(D, _),
+    has_any_risk(D, RGiven),
+    symptom_match_count(D, SGiven, C),
+    C >= 1, !.
 diagnose_from(SGiven, _RGiven, D, mild) :-
     disease(D, _),
     symptom_match_count(D, SGiven, C),

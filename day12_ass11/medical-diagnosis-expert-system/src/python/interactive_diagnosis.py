@@ -5,7 +5,6 @@ import shlex
 import sys
 import re
 
-# mapping: (prolog_atom, prompt)
 _m = [
     ('fever', 'Fever'),
     ('chills', 'Chills'),
@@ -29,11 +28,9 @@ _m = [
     ('cloudy_urine', 'Cloudy urine'),
     ('flashbacks', 'Flashbacks / intrusive memories'),
     ('excessive_thirst', 'Excessive thirst'),
-    ('frequent_urination', 'Frequent urination (diabetes)'),
     ('unexplained_weight_loss', 'Unexplained weight loss'),
 ]
 
-# risk/factors mapping
 _r = [
     ('travel_to_endemic_regions', 'Travel to malaria-endemic region'),
     ('previous_malaria', 'Previous malaria history'),
@@ -48,7 +45,6 @@ _r = [
     ('previous_uti', 'Previous UTI'),
 ]
 
-# compact list of severe indicators (from KB severe_symptom entries)
 _sev_checks = [
     'organ_failure','cerebral_malaria','jaundice',
     'difficulty_breathing','chest_pain','severe_fatigue',
@@ -81,7 +77,6 @@ def run_case(slist, rlist, timeout=20):
     return out
 
 def parse_diags(out):
-    # find lines like: --- malaria (severe) ---
     names = []
     for m in re.finditer(r'^---\s+([^\s(]+)', out, flags=re.M):
         names.append(m.group(1))
@@ -93,7 +88,6 @@ def adaptive_dialog():
     asked = set()
 
     print("Adaptive symptom questioning (heuristic). I'll ask high-value Qs first.")
-    # 1) severe checks first — if any yes, add and stop (escalate)
     for sv in _sev_checks:
         if sv in asked:
             continue
@@ -104,7 +98,6 @@ def adaptive_dialog():
             out = run_case(s, r)
             return out
 
-    # 2) risk factors next, checking after each to narrow differentials
     for k,q in _r:
         if a_ask(q):
             r.append(k)
@@ -112,11 +105,8 @@ def adaptive_dialog():
         out = run_case(s, r)
         names = parse_diags(out)
         if len(names) == 1:
-            # single candidate found, stop early
             return out
-        # otherwise continue asking
 
-    # 3) core symptoms, ask iteratively and re-run to check narrowing
     for k,q in _m:
         if k in asked:
             continue
@@ -125,14 +115,11 @@ def adaptive_dialog():
         asked.add(k)
         out = run_case(s, r)
         names = parse_diags(out)
-        # stop if single candidate or small set
         if len(names) == 1:
             return out
-        # heuristic stop: if <=2 candidates, accept and show them
         if 0 < len(names) <= 2:
             return out
 
-    # final pass: no decisive single candidate — run full inference and return whatever
     return run_case(s, r)
 
 def adaptive_dialog_layered():
@@ -140,7 +127,6 @@ def adaptive_dialog_layered():
     r = []
     asked = set()
 
-    # quick helper to map atom->prompt lookup in _m/_r
     def prompt_for(k):
         for a,q in _m:
             if a == k: return q
@@ -148,14 +134,12 @@ def adaptive_dialog_layered():
             if a == k: return q
         return k.replace('_',' ').capitalize()
 
-    # severe checks first but phrased simply
     for sv in _sev_checks:
         q = sv.replace('_',' ').capitalize()
         if a_ask(f"Are you having {q} (sudden or severe)?"):
             s.append(sv)
-            return run_case(s, r)  # escalate, immediate inference
+            return run_case(s, r)
 
-    # stage 1: simple screening (few plain Qs)
     screening = ['fever','cough','abdominal_pain','red_itchy_rash',
                  'painful_urination','excessive_thirst','weight_loss','flashbacks','joint_pain']
     for k in screening:
@@ -164,7 +148,6 @@ def adaptive_dialog_layered():
             s.append(k)
         asked.add(k)
 
-    # targeted followups based on positives
     if 'fever' in s:
         for k in ('chills','sweating'):
             if a_ask(prompt_for(k)): s.append(k)
@@ -180,13 +163,14 @@ def adaptive_dialog_layered():
             if a_ask(prompt_for(k)): s.append(k)
 
     if 'painful_urination' in s:
-        if a_ask(prompt_for('previous_uti')): r.append('previous_uti')
-        if a_ask(prompt_for('diabetes')): r.append('diabetes')  # fallback; may not be in _r
+        if a_ask("Frequent urination?"): s.append('frequent_urination')
+        if a_ask("Cloudy urine?"): s.append('cloudy_urine')
+        if a_ask("Previous UTIs?"): r.append('previous_uti')
+        if a_ask("Family history of diabetes?"): r.append('family_history_of_diabetes')
 
     if 'excessive_thirst' in s or 'frequent_urination' in s:
         if a_ask(prompt_for('family_history_of_diabetes')): r.append('family_history_of_diabetes')
 
-    # quick history questions if still unclear
     if a_ask("Have you had recent antibiotics or steroids?"):
         r.append('recent_antibiotics_or_steroids')
     if a_ask("Are you immunosuppressed or on long-term steroids?"):
@@ -194,13 +178,10 @@ def adaptive_dialog_layered():
     if a_ask("No recent flu vaccine?"):
         r.append('no_recent_vaccination')
 
-    # run inference now
     out = run_case(s, r)
     names = parse_diags(out)
 
-    # if still ambiguous, ask discriminators (one or two)
     if len(names) > 1:
-        # pick a few high-value discriminators
         if a_ask("Do you smoke?"):
             r.append('smoking_history')
         if a_ask("Any recent travel to malaria areas?"):
@@ -210,7 +191,6 @@ def adaptive_dialog_layered():
     return out
 
 def run_tests():
-    # quick integration cases: (symptoms, risks, expected_disease_substr)
     tcs = [
         (['fever','chills','sweating'], ['travel_to_endemic_regions'], 'malaria'),
         (['fever','cough','fatigue'], ['no_recent_vaccination'], 'influenza'),
@@ -239,7 +219,6 @@ def adaptive_prob_dialog():
     r = []
     asked = set()
 
-    # small local KB (mirrors Prolog atoms) for quick scoring
     dm = {
         'malaria': {'sym':{'fever','chills','sweating'}, 'risk':{'travel_to_endemic_regions','previous_malaria','immunosuppressed'}},
         'influenza': {'sym':{'fever','cough','fatigue','sore_throat','runny_nose'}, 'risk':{'no_recent_vaccination','asthma_or_copd','immunosuppressed'}},
@@ -253,9 +232,18 @@ def adaptive_prob_dialog():
         'diabetes_type2': {'sym':{'excessive_thirst','frequent_urination','unexplained_weight_loss','elevated_blood_sugar'}, 'risk':{'family_history_of_diabetes','obesity','sedentary_lifestyle'}},
     }
 
-    def score_now():
-        scores = {d:0 for d in dm}
-        for d,v in dm.items():
+    loc_map = {
+        'chest': {'lung_carcinoma','influenza'},
+        'abdomen': {'ibs','uti','fungal_infection'},
+        'joint': {'osteoarthritis'},
+        'urine': {'uti','diabetes_type2'},
+        'general': set(dm.keys()),
+    }
+
+    def score_now(cands):
+        scores = {d:0 for d in cands}
+        for d in cands:
+            v = dm[d]
             for ss in s:
                 if ss in v['sym']:
                     scores[d] += 2
@@ -276,84 +264,187 @@ def adaptive_prob_dialog():
         gap = tscore - second
         return top, conf, gap
 
-    # 1) general pain screening (very simple)
-    if a_ask("Do you have any pain right now?"):
-        # location-specific yes/no Qs (add corresponding symptom atoms)
-        if a_ask("Is the pain in your chest?"):
-            s.append('chest_pain')   # may map to severe indicator for influenza/lung issues
-        if a_ask("Is the pain in your abdomen?"):
+    pain = a_ask("Do you have any pain right now?")
+    if pain:
+        if a_ask("Is it chest pain?"):
+            s.append('chest_pain')
+            loc = 'chest'
+        elif a_ask("Is it abdominal pain?"):
             s.append('abdominal_pain')
-        if a_ask("Is it joint pain?"):
+            loc = 'abdomen'
+        elif a_ask("Is it joint pain?"):
             s.append('joint_pain')
-        if a_ask("Is the pain when you pass urine?"):
+            loc = 'joint'
+        elif a_ask("Is it pain while peeing?"):
             s.append('painful_urination')
-        if a_ask("Is it severe or limiting you?"):
-            # treat as severe generic flag
-            s.append('severe_pain')
-    # check severe indicators explicitly (escalate)
-    for sv in _sev_checks:
-        if a_ask(sv.replace('_',' ').capitalize() + " now?"):
-            s.append(sv)
-            print("Severe feature noted — running immediate inference.")
-            return run_case(s, r)
+            loc = 'urine'
+        else:
+            loc = 'general'
+    else:
+        loc = 'general'
 
-    # quick history/risk screening
+    cands = set(loc_map.get(loc, loc_map['general']))
+    if not cands:
+        cands = set(dm.keys())
+
     for k,q in _r:
-        if a_ask(q):
-            r.append(k)
+        if k in ('travel_to_endemic_regions','no_recent_vaccination','smoking_history','previous_uti','family_history_of_diabetes','immunosuppressed'):
+            if a_ask(q):
+                r.append(k)
+            asked.add(k)
 
-    # iterative scoring loop: ask small discriminators until confident
-    dis = [
-        ('fever','Fever'),
-        ('cough','Cough'),
-        ('fatigue','Fatigue'),
-        ('chills','Chills'),
-        ('sweating','Sweating'),
-        ('persistent_cough','Persistent cough'),
-        ('blood_in_sputum','Blood in sputum'),
-        ('shortness_of_breath','Shortness of breath'),
-        ('excessive_thirst','Excessive thirst'),
-        ('frequent_urination','Frequent urination'),
-        ('red_itchy_rash','Red/itchy rash'),
-        ('bloating','Bloating'),
-        ('diarrhea_or_constipation','Diarrhea or constipation'),
-        ('weight_loss','Weight loss'),
-    ]
-    max_q = 8
+    if loc == 'chest':
+        if a_ask("Do you have a cough?"): s.append('cough')
+        if a_ask("Shortness of breath?"): s.append('shortness_of_breath')
+        if a_ask("Any blood when coughing?"): s.append('blood_in_sputum')
+        if a_ask("Do you smoke?"): r.append('smoking_history')
+
+    if loc == 'abdomen':
+        if a_ask("Bloating or change in bowel habit?"):
+            if a_ask("Bloating?"): s.append('bloating')
+            if a_ask("Diarrhea or constipation?"): s.append('diarrhea_or_constipation')
+        if a_ask("Recent antibiotics or steroids?"): r.append('recent_antibiotics_or_steroids')
+
+    if loc == 'joint':
+        if a_ask("Is the joint stiff?"): s.append('stiffness')
+        if a_ask("Is there swelling?"): s.append('swelling')
+        if a_ask("Any long-term joint problems or injury?"): r.append('prior_joint_injury')
+
+    if loc == 'urine':
+        if a_ask("Frequent urination?"): s.append('frequent_urination')
+        if a_ask("Cloudy urine?"): s.append('cloudy_urine')
+        if a_ask("Previous UTIs?"): r.append('previous_uti')
+        if a_ask("Family history of diabetes?"): r.append('family_history_of_diabetes')
+
+    sev_by_d = {
+        'malaria': ['organ_failure','cerebral_malaria','jaundice'],
+        'influenza': ['difficulty_breathing','chest_pain','severe_fatigue'],
+        'lung_carcinoma': ['difficulty_breathing','weight_loss'],
+        'schizophrenia': ['intense_hallucinations','inability_to_function'],
+        'osteoarthritis': ['chronic_pain','joint_deformity'],
+        'ibs': ['chronic_severe_pain','significant_bowel_dysfunction'],
+        'fungal_infection': ['systemic_fungal_infection','deep_tissue_involvement'],
+        'uti': ['flank_pain','fever_with_nausea'],
+        'ptsd': ['chronic_flashbacks','severe_emotional_distress'],
+        'diabetes_type2': ['diabetic_ketoacidosis','organ_damage'],
+    }
+    sev_prompt = {
+        'organ_failure': 'Very low urine output, severe confusion or very yellow skin/eyes?',
+        'cerebral_malaria': 'Seizures, severe confusion or loss of consciousness?',
+        'jaundice': 'Yellowing of the skin or eyes?',
+        'difficulty_breathing': 'Is breathing very difficult right now?',
+        'chest_pain': 'Are you having severe chest pain?',
+        'severe_fatigue': 'Are you extremely weak or hard to wake?',
+        'inability_to_function': 'Unable to carry out normal daily activities?',
+        'intense_hallucinations': 'Seeing or hearing things that are not there and very distressed?',
+        'chronic_pain': 'Is the pain constant and severe, limiting movement?',
+        'joint_deformity': 'Noticeable deformity or inability to use the joint?',
+        'chronic_severe_pain': 'Long‑standing severe abdominal pain?',
+        'significant_bowel_dysfunction': 'Severe ongoing diarrhea or obstruction signs?',
+        'systemic_fungal_infection': 'High fever with spreading skin involvement or sickness?',
+        'deep_tissue_involvement': 'Deep sore or spreading redness and fever?',
+        'flank_pain': 'Pain on the side of your lower back (flank)?',
+        'fever_with_nausea': 'Fever with vomiting or severe nausea?',
+        'chronic_flashbacks': 'Ongoing uncontrollable flashbacks causing distress?',
+        'severe_emotional_distress': 'Severe panic/very distressed and unsafe?',
+        'diabetic_ketoacidosis': 'Very rapid breathing, vomiting or confusion (possible DKA)?',
+        'organ_damage': 'Symptoms suggesting serious organ problem (liver/kidney)?',
+    }
+    rel_sev = []
+    if loc == 'general':
+        rel_sev = ['difficulty_breathing','chest_pain','organ_failure']
+    else:
+        for d in cands:
+            for sv in sev_by_d.get(d, []):
+                if sv not in asked and sv not in rel_sev:
+                    rel_sev.append(sv)
+    for sv in rel_sev:
+        if sv in asked:
+            continue
+        asked.add(sv)
+        if sv == 'difficulty_breathing':
+            q = sev_prompt.get(sv, 'Is breathing very difficult right now?')
+            if a_ask(q):
+                if a_ask("Did this start suddenly (minutes–hours)?"):
+                    s.append(sv)
+                    print("Acute severe breathing difficulty — escalating and running inference now.")
+                    return run_case(s, r)
+                else:
+                    if 'smoking_history' in r or a_ask("Do you smoke or have a long-term cough?"):
+                        s.append('persistent_cough')
+                        continue
+                    else:
+                        s.append(sv)
+                        print("Breathing difficulty noted — running inference now.")
+                        return run_case(s, r)
+        else:
+            qtxt = sev_prompt.get(sv, sv.replace('_',' ').capitalize() + ' now?')
+            if a_ask(qtxt):
+                s.append(sv)
+                print("Urgent sign reported — escalating and running inference now.")
+                return run_case(s, r)
+
+    dis_map = {
+        'malaria':[('fever','Fever'),('chills','Chills'),('sweating','Sweating')],
+        'influenza':[('fever','Fever'),('cough','Cough'),('fatigue','Fatigue')],
+        'lung_carcinoma':[('persistent_cough','Persistent cough'),('blood_in_sputum','Blood in sputum'),('weight_loss','Weight loss')],
+        'osteoarthritis':[('joint_pain','Joint pain'),('stiffness','Stiffness'),('swelling','Swelling')],
+        'ibs':[('abdominal_pain','Abdominal pain'),('bloating','Bloating')],
+        'uti':[('painful_urination','Painful urination'),('frequent_urination','Frequent urination')],
+        'diabetes_type2':[('excessive_thirst','Excessive thirst'),('frequent_urination','Frequent urination')],
+    }
+
+    pool = []
+    for d in cands:
+        pool.extend(dis_map.get(d, []))
+    seen = set(); pool2 = []
+    for k,lab in pool:
+        if k not in seen:
+            seen.add(k); pool2.append((k,lab))
+    pool = pool2
+
+    max_q = 6
     asked_q = 0
     while asked_q < max_q:
-        scores = score_now()
+        scores = {d:0 for d in cands}
+        for d in cands:
+            v = dm[d]
+            for ss in s:
+                if ss in v['sym']: scores[d] += 2
+                if ss in _sev_checks: scores[d] += 5
+            for rr in r:
+                if rr in v['risk']: scores[d] += 3
+
         top, conf, gap = top_candidate(scores)
-        # stop if confident enough
         if conf >= 0.6 or gap >= 3 or (top and scores[top] >= 6):
             break
-        # pick next discriminator not yet asked
         next_q = None
-        for k,lab in dis:
+        for k,lab in pool:
             if k in s or k in asked:
                 continue
-            next_q = (k, lab)
-            break
+            next_q = (k, lab); break
         if not next_q:
             break
         k, lab = next_q
-        asked.add(k)
-        asked_q += 1
+        asked.add(k); asked_q += 1
         if a_ask(lab):
             s.append(k)
-        # after each answer, re-evaluate; small early-run to check candidates via Prolog
-        out = run_case(s, r)
-        names = parse_diags(out)
-        if len(names) == 1:
-            return out
+        scores = {d:0 for d in cands}
+        for d in cands:
+            v = dm[d]
+            for ss in s:
+                if ss in v['sym']: scores[d] += 2
+            for rr in r:
+                if rr in v['risk']: scores[d] += 3
+        items = sorted(scores.items(), key=lambda x:-x[1])
+        if items and items[0][1] - (items[1][1] if len(items)>1 else 0) >= 3:
+            topd = items[0][0]
+            cands = {topd}
 
-    # final inference run
     out = run_case(s, r)
     return out
 
-# replace old adaptive call in main() to use adaptive_prob_dialog
 def main():
-    # allow quick test mode
     if len(sys.argv) > 1 and sys.argv[1] in ('--test','-t'):
         ok = run_tests()
         sys.exit(0 if ok else 2)
